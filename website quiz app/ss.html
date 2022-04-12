@@ -1,0 +1,284 @@
+<DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link href="styles.css" rel="stylesheet">
+      <script defer src="script.js"></script>
+      <title>QUIZ GAME </title>
+      <style>
+       
+    
+      *, *::before, *::after {
+        box-sizing: border-box;
+        font-family: Gotham Rounded;
+      }
+      
+      .left {
+            display: inline-block;
+            /* border: 2px solid red; */
+            position: absolute;
+            left: 60px;
+            top: 20px;
+        }
+    
+        .left img {
+            width: 136px;
+            filter: invert(100%);
+        }
+    
+        .left div {
+            line-height: 256px;
+            font-size: 76px;
+            text-align: center;
+            
+        }
+    
+        .mid {
+            display: block;
+            width: 36%;
+            margin: 29px auto;
+            /* border: 2px solid green; */
+        }
+        
+    
+      
+      :root {
+        --hue-neutral: 200;
+        --hue-wrong: 0;
+        --hue-correct: 145;
+      }
+      
+      body {
+        --hue: var(--hue-neutral);
+        padding: 0;
+        margin: 0;
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        background-color: hsl(var(--hue), 100%, 20%);
+      }
+      
+      body.correct {
+        --hue: var(--hue-correct);
+      }
+      
+      body.wrong {
+        --hue: var(--hue-wrong);
+      }
+      
+      .container {
+        width: 800px;
+        max-width: 80%;
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 0 10px 2px;
+      }
+      
+      .btn-grid {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        gap: 10px;
+        margin: 20px 0;
+      }
+      
+      .btn {
+        --hue: var(--hue-neutral);
+        border: 1px solid hsl(var(--hue), 100%, 30%);
+        background-color: hsl(var(--hue), 100%, 50%);
+        border-radius: 5px;
+        padding: 5px 10px;
+        color: white;
+        outline: none;
+      }
+      
+      .btn:hover {
+        border-color: black;
+      }
+      
+      .btn.correct {
+        --hue: var(--hue-correct);
+        color: black;
+      }
+      
+      .btn.wrong {
+        --hue: var(--hue-wrong);
+      }
+      
+      .start-btn, .next-btn {
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 10px 20px;
+      }
+      
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .hide {
+        display: none;
+      }
+      h1{
+          border: 2px solid black;
+          border-radius: 23px;
+          margin: 150px;
+          text-align: center;
+      }
+      img{
+          image-resolution: ;
+      }
+      </style>
+    </head>
+    <body>
+        
+    
+        
+    
+        <h1>QUIZ APP</h1>
+      
+      <div class="left">
+       
+        <!-- <div>QUIZ APP</div> -->
+    </div>
+      <div class="container">
+        <div id="question-container" class="hide">
+          <div id="question">Question</div>
+          <div id="answer-buttons" class="btn-grid">
+            <button class="btn">Answer 1</button>
+            <button class="btn">Answer 2</button>
+            <button class="btn">Answer 3</button>
+            <button class="btn">Answer 4</button>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="start-btn" class="start-btn btn">Start</button>
+          <button id="next-btn" class="next-btn btn hide">Next</button>
+         
+
+        </div>
+      </div>
+     
+      <!-- <button class="btn">Submit</button>ss -->
+      <script>
+          const startButton = document.getElementById('start-btn')
+    const nextButton = document.getElementById('next-btn')
+    const questionContainerElement = document.getElementById('question-container')
+    const questionElement = document.getElementById('question')
+    const answerButtonsElement = document.getElementById('answer-buttons')
+    
+    let shuffledQuestions, currentQuestionIndex
+    
+    startButton.addEventListener('click', startGame)
+    nextButton.addEventListener('click', () => {
+      currentQuestionIndex++
+      setNextQuestion()
+    })
+    
+    function startGame() {
+      startButton.classList.add('hide')
+      shuffledQuestions = questions.sort(() => Math.random() - .5)
+      currentQuestionIndex = 0
+      questionContainerElement.classList.remove('hide')
+      setNextQuestion()
+    }
+    
+    function setNextQuestion() {
+      resetState()
+      showQuestion(shuffledQuestions[currentQuestionIndex])
+    }
+    
+    function showQuestion(question) {
+      questionElement.innerText = question.question
+      question.answers.forEach(answer => {
+        const button = document.createElement('button')
+        button.innerText = answer.text
+        button.classList.add('btn')
+        if (answer.correct) {
+          button.dataset.correct = answer.correct
+        }
+        button.addEventListener('click', selectAnswer)
+        answerButtonsElement.appendChild(button)
+      })
+    }
+    
+    function resetState() {
+      clearStatusClass(document.body)
+      nextButton.classList.add('hide')
+      while (answerButtonsElement.firstChild) {
+        answerButtonsElement.removeChild(answerButtonsElement.firstChild)
+      }
+    }
+    
+    function selectAnswer(e) {
+      const selectedButton = e.target
+      const correct = selectedButton.dataset.correct
+      setStatusClass(document.body, correct)
+      Array.from(answerButtonsElement.children).forEach(button => {
+        setStatusClass(button, button.dataset.correct)
+      })
+      if (shuffledQuestions.length > currentQuestionIndex + 1) {
+        nextButton.classList.remove('hide')
+      } else {
+        startButton.innerText = 'Restart'
+        startButton.classList.remove('hide')
+      }
+    }
+    
+    function setStatusClass(element, correct) {
+      clearStatusClass(element)
+      if (correct) {
+        element.classList.add('correct')
+      } else {
+        element.classList.add('wrong')
+      }
+    }
+    
+    function clearStatusClass(element) {
+      element.classList.remove('correct')
+      element.classList.remove('wrong')
+    }
+    
+    const questions = [
+      {
+        question: '. Merge sort uses which of the following technique to implement sorting?',
+        answers: [
+          { text: ' divide and conquer', correct: true },
+          { text: 'dynamic programming', correct: false }
+        ]
+      },
+      {
+        question: 'What is the average case time complexity of merge sort?',
+        answers: [
+          { text: 'O(n log n)', correct: true },
+          { text: 'O(n2)', correct: false },
+          { text: 'O(n^2log n)', correct: false },
+          { text: '', correct: false }
+        ]
+      },
+      {
+        question: 'Division Pattern of Problems in Divide and Conquer approach?',
+        answers: [
+          { text: 'random', correct: false },
+          { text: 'Recursive',correct:true},
+          { text: 'parallel', correct: false },
+          { text: 'Iterative', correct: false }
+        ]
+      },
+      {
+        question: ' A ___ is a compact, informal, and environment-independent description of a computer programming ',
+         answers: [
+          { text: 'Psuedocode', correct: false },
+          { text: 'Non-linear data structure', correct: true }
+        ]
+      }
+    ]
+    
+      </script>
+    </body>
+    </html>
