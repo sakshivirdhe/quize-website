@@ -57,9 +57,14 @@
         display: flex;
         width: 100vw;
         height: 100vh;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: hsl(var(--hue), 100%, 20%);
+background-image: url("img/bg.jpg");
+background-repeat: no-repeat;
+background-size: cover;
+        
       }
       
       body.correct {
@@ -77,6 +82,10 @@
         border-radius: 5px;
         padding: 10px;
         box-shadow: 0 0 10px 2px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
       
       .btn-grid {
@@ -114,13 +123,8 @@
         font-weight: bold;
         padding: 10px 20px;
       }
-      
-      .controls {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
+ 
+     
       .hide {
         display: none;
       }
@@ -130,9 +134,9 @@
           margin: 150px;
           text-align: center;
       }
-      img{
-          image-resolution: ;
-      }
+     
+      
+
       </style>
     </head>
     <body>
@@ -145,7 +149,7 @@
       <div class="left">
        
         <!-- <div>QUIZ APP</div> -->
-    </div>
+    <div class="c2">
       <div class="container">
         <div id="question-container" class="hide">
           <div id="question">Question</div>
@@ -163,7 +167,7 @@
 
         </div>
       </div>
-     
+    </div>
       <!-- <button class="btn">Submit</button>ss -->
       <script>
           const startButton = document.getElementById('start-btn')
